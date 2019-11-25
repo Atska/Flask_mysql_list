@@ -1,0 +1,154 @@
+{% extends "Layout.html" %}
+{% block content %}
+  <div class="container">
+    <header>
+      <h2>Hello Bücher!</h2>
+    <p>Das ist eine Tabelle über Bücher die ich gelesen habe und jene, die ich noch zu lesen habe.</p>
+    </header>
+    <!-- table -->
+    <div class="container">
+      <div class="row">
+        <div class="col md-12">
+          <h2>Bücherliste <button type="button" class="btn btn-light pull right" data-toggle="modal"
+                                  data-target="#HinzuModal">Buch hinzufügen</button> </h2>
+          <!-- flash message -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+          {% endwith %}
+          <!-- flash message -->
+          <!-- Tabelle -->
+          <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Author</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Release Date</th>
+              <th scope="col">Already Read</th>
+              <th scope="col">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for row in data %}
+            <tr>
+              <th scope="row">{{row.0}}</th>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>{{row.5}}</td>
+              <td>
+                <a href="//updateBooks{{row.0}}/" class="btn btn-info" data-toggle="modal" data-target="#BearbModal{{row.0}}">Edit</a>
+                <a href="/deleteBooks/{{row.0}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          </table>
+        </div>
+        <!-- Tabelle -->
+          <!-- Modal Bearbeiten-->
+          {% for row in data %}
+          <div id="BearbModal{{row.0}}" class="modal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Bearbeite die Daten.</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('updateBooks') }}" method="POST">
+                  <div class="form-group">
+                    <label>Title:</label>
+                    <input type="hidden" name="id" value="{{row.0}}">
+                    <input type="text" class="form-control" name="title" value="{{row.1}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Author:</label>
+                    <input type="text" class="form-control" name="author" value="{{row.2}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Genre:</label>
+                    <input type="text" class="form-control" name="genre" value="{{row.3}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Release date:</label>
+                    <input type="text" class="form-control" name="release" value="{{row.4}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Read:</label>
+                    <select class="form-control" name="read">
+                      <option class="text-muted">{{row.5}}</option>
+                      <option>Gelesen</option>
+                      <option>Ungelesen</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Speichern</button>
+                  </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <!-- End Modal Bearbeiten-->
+          <!-- Modal "Buch hinzufügen-->
+            <div id="HinzuModal" class="modal" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Füge die Daten hier ein.</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('insertBooks') }}" method="POST">
+                      <div class="form-group">
+                        <label>Title:</label>
+                        <input type="text" class="form-control" name="title">
+                      </div>
+                      <div class="form-group">
+                        <label>Author:</label>
+                        <input type="text" class="form-control" name="author">
+                      </div>
+                      <div class="form-group">
+                        <label>Genre:</label>
+                        <input type="text" class="form-control" name="genre">
+                      </div>
+                      <div class="form-group">
+                        <label>Release date:</label>
+                        <input type="text" class="form-control" name="release_date">
+                      </div>
+                      <div class="form-group">
+                        <label>Read:</label>
+                        <select class="form-control" name="already_read">
+                          <option class="text-muted">Gelesen oder nicht?</option>
+                          <option>Gelesen</option>
+                          <option>Ungelesen</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Speichern</button>
+                      </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          <!-- Ende Modal "Buch hinzufügen-->
+      </div>
+    </div>
+  </div>
+{% endblock content %}

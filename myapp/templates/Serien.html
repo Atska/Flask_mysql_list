@@ -1,0 +1,145 @@
+{% extends "Layout.html" %}
+{% block content %}
+  <div class="container">
+    <header>
+      <h2>Hello Serien!</h2>
+    <p>Das ist eine Tabelle über Filme die ich gelesen habe und jene, die ich noch zu lesen habe.</p>
+    </header>
+    <!-- table -->
+    <div class="container">
+      <div class="row">
+        <div class="col md-12">
+          <h2>Serienliste <button type="button" class="btn btn-light pull right" data-toggle="modal"
+                                  data-target="#HinzuModal">Serie hinzufügen</button> </h2>
+          <!-- flash message -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+          {% endwith %}
+          <!-- flash message -->
+          <!-- Tabelle -->
+          <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Episodes</th>
+              <th scope="col">Aired</th>
+              <th scope="col">Watched</th>
+              <th scope="col">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for row in data %}
+            <tr>
+              <th scope="row">{{row.0}}</th>
+              <td>{{row.1}}</td>
+              <td>{{row.2}}</td>
+              <td>{{row.3}}</td>
+              <td>{{row.4}}</td>
+              <td>
+                <a href="//updateSerien{{row.0}}/" class="btn btn-info" data-toggle="modal"
+                   data-target="#BearbModal{{row.0}}">Edit</a>
+                <a href="/deleteSerien/{{row.0}}" class="btn btn-danger btn-xs"
+                   onclick="return confirm('Möchtest Du die Daten wirklich löschen')">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+          </table>
+        </div>
+        <!-- Tabelle -->
+          <!-- Modal Bearbeiten-->
+          {% for row in data %}
+          <div id="BearbModal{{row.0}}" class="modal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Bearbeite die Daten.</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('updateSerien') }}" method="POST">
+                  <div class="form-group">
+                    <label>Title:</label>
+                    <input type="hidden" name="id" value="{{row.0}}">
+                    <input type="text" class="form-control" name="title" value="{{row.1}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Episodes:</label>
+                    <input type="text" class="form-control" name="episodes" value="{{row.2}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Aired:</label>
+                    <input type="text" class="form-control" name="aired" value="{{row.3}}">
+                  </div>
+                  <div class="form-group">
+                    <label>Watched:</label>
+                    <select class="form-control" name="watched">
+                      <option class="text-muted">{{row.4}}</option>
+                      <option>Gesehen</option>
+                      <option>Ungesehen</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Speichern</button>
+                  </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <!-- End Modal Bearbeiten-->
+          <!-- Modal "Buch hinzufügen-->
+            <div id="HinzuModal" class="modal" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Füge die Daten hier ein.</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form action="{{ url_for('insertSerien') }}" method="POST">
+                      <div class="form-group">
+                        <label>Title:</label>
+                        <input type="text" class="form-control" name="title">
+                      </div>
+                      <div class="form-group">
+                        <label>Episodes:</label>
+                        <input type="text" class="form-control" name="episodes">
+                      </div>
+                      <div class="form-group">
+                        <label>Aired:</label>
+                        <input type="text" class="form-control" name="aired">
+                      </div>
+                      <div class="form-group">
+                        <label>Watched:</label>
+                        <select class="form-control" name="watched">
+                          <option class="text-muted">Gesehen oder nicht?</option>
+                          <option>Gesehen</option>
+                          <option>Ungesehen</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Speichern</button>
+                      </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          <!-- Ende Modal "Buch hinzufügen-->
+      </div>
+    </div>
+  </div>
+{% endblock content %}
