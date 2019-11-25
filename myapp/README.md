@@ -6,8 +6,7 @@
  the codebase has sql-codes.
 
 # Demo
-![Screenshot](Screenshot.png)
-https://imgur.com/a/96Ds7Qb
+![Screenshot](https://user-images.githubusercontent.com/54402396/69585884-389b9500-0fe1-11ea-9b32-e7fbc30ec44a.png)
 # Quick start
 1. Download the repository and use this command to install all 
 required libaries
