@@ -1,4 +1,4 @@
-# media list
+# Media list
  This is a web-api for listing all my media I consumed and more 
  importantly still need to. The backend was created in python with the 
  help ob the web-framework Flask. For the Frontend Bootstrap and basic
@@ -16,7 +16,7 @@ create_sqldb.py
 3. Create a new database in create_sqldb.py just by running the code
 4. Add the name of the database in __init__ 
 5. run the application in run_app.py
-# libaries 
+# Libraries 
 [flask quickstart](https://flask.palletsprojects.com/en/1.1.x/quickstart/#accessing-request-data)
 Everything you want to know about flask is here.
 
